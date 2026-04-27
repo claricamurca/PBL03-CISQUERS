@@ -1,0 +1,61 @@
+{
+  "dataset_rows": 1044,
+  "positive_class": "risk_low_performance=1",
+  "test_size": 0.2,
+  "decision_threshold": 0.5,
+  "accuracy": 0.8851674641148325,
+  "precision": 0.6896551724137931,
+  "recall": 0.8695652173913043,
+  "f1_score": 0.7692307692307693,
+  "confusion_matrix": [
+    [
+      145,
+      18
+    ],
+    [
+      6,
+      40
+    ]
+  ],
+  "classification_report": {
+    "not_low_performance": {
+      "precision": 0.9602649006622517,
+      "recall": 0.8895705521472392,
+      "f1-score": 0.9235668789808917,
+      "support": 163.0
+    },
+    "low_performance_risk": {
+      "precision": 0.6896551724137931,
+      "recall": 0.8695652173913043,
+      "f1-score": 0.7692307692307693,
+      "support": 46.0
+    },
+    "accuracy": 0.8851674641148325,
+    "macro avg": {
+      "precision": 0.8249600365380224,
+      "recall": 0.8795678847692718,
+      "f1-score": 0.8463988241058304,
+      "support": 209.0
+    },
+    "weighted avg": {
+      "precision": 0.9007048647798158,
+      "recall": 0.8851674641148325,
+      "f1-score": 0.8895981658301471,
+      "support": 209.0
+    }
+  },
+  "overfitting_underfitting_analysis": "No strong overfitting or underfitting signal: training and validation curves remain reasonably close at the end of training.",
+  "model_architecture": {
+    "type": "MLP",
+    "hidden_layers": [
+      64,
+      32,
+      16
+    ],
+    "activation": "relu",
+    "output_activation": "sigmoid",
+    "optimizer": "Adam",
+    "loss": "binary_crossentropy",
+    "regularization": "Dropout and EarlyStopping"
+  }
+}
