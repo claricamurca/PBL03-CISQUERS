@@ -14,7 +14,7 @@ except ModuleNotFoundError:
 st.set_page_config(
     page_title="Previsão de Desempenho Escolar",
     layout="wide",
-    initial_sidebar_state="expanded",
+    initial_sidebar_state="collapsed",
 )
 
 
