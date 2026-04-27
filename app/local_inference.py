@@ -1,9 +1,10 @@
 from __future__ import annotations
 
 import sys
-from functools import lru_cache
 from pathlib import Path
 from typing import Any
+
+import streamlit as st
 
 PROJECT_ROOT = Path(__file__).resolve().parents[1]
 if str(PROJECT_ROOT) not in sys.path:
@@ -12,7 +13,7 @@ if str(PROJECT_ROOT) not in sys.path:
 from src.inference.predictor import PredictionResult, StudentRiskPredictor
 
 
-@lru_cache(maxsize=1)
+@st.cache_resource(show_spinner=False)
 def get_local_predictor() -> StudentRiskPredictor:
     predictor = StudentRiskPredictor()
     predictor.load()

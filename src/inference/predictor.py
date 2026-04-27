@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import json
+import logging
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
@@ -10,6 +11,8 @@ import pandas as pd
 import tensorflow as tf
 
 from src.config import MODEL_FILE, PREPROCESSOR_FILE, SCHEMA_FILE
+
+logger = logging.getLogger(__name__)
 
 
 @dataclass
@@ -36,22 +39,47 @@ class StudentRiskPredictor:
         self.preprocessor = None
         self.schema: dict[str, Any] = {}
 
+    def is_loaded(self) -> bool:
+        return self.model is not None and self.preprocessor is not None and bool(self.schema)
+
     def load(self) -> None:
-        if not self.model_path.exists() or not self.preprocessor_path.exists():
+        if self.is_loaded():
+            return
+
+        missing_paths = [
+            str(path)
+            for path in (self.model_path, self.preprocessor_path, self.schema_path)
+            if not path.exists()
+        ]
+        if missing_paths:
             raise FileNotFoundError(
-                "Model artifacts were not found. Run `python -m src.training.train_mlp` first."
+                "Model artifacts were not found: " + ", ".join(missing_paths)
             )
 
-        self.model = tf.keras.models.load_model(self.model_path)
-        self.preprocessor = joblib.load(self.preprocessor_path)
-        self.schema = json.loads(self.schema_path.read_text(encoding="utf-8"))
+        schema = json.loads(self.schema_path.read_text(encoding="utf-8"))
+        preprocessor = joblib.load(self.preprocessor_path)
+        model = tf.keras.models.load_model(self.model_path, compile=False)
+
+        if not getattr(model, "weights", None):
+            raise ValueError(
+                f"Loaded Keras model has no weights after deserialization: {self.model_path}"
+            )
+
+        self.schema = schema
+        self.preprocessor = preprocessor
+        self.model = model
+        logger.info(
+            "Loaded predictor artifacts from %s with %d feature columns.",
+            self.model_path,
+            len(self.feature_columns),
+        )
 
     @property
     def feature_columns(self) -> list[str]:
         return self.schema.get("feature_columns", [])
 
     def predict_one(self, payload: dict[str, Any]) -> PredictionResult:
-        if self.model is None or self.preprocessor is None:
+        if not self.is_loaded():
             self.load()
 
         missing_columns = [column for column in self.feature_columns if column not in payload]
@@ -70,4 +98,3 @@ class StudentRiskPredictor:
             risk_label=label,
             threshold=self.threshold,
         )
-
