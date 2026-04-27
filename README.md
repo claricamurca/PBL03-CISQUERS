@@ -127,7 +127,7 @@ python -m src.training.train_mlp
 
 Artefatos gerados:
 
-- `models/mlp_student_risk.keras`;
+- `models/mlp_student_risk.h5`;
 - `models/preprocessor.joblib`;
 - `models/feature_schema.json`;
 - `outputs/metrics.json`;
@@ -260,4 +260,3 @@ Observação para Windows: se a instalação do TensorFlow falhar por limite de 
 - frontend Streamlit;
 - estrutura modular para equipe;
 - documentação e setup de deploy.
-

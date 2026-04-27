@@ -13,7 +13,7 @@ MATH_FILE = RAW_DATA_DIR / "student-mat.csv"
 PORTUGUESE_FILE = RAW_DATA_DIR / "student-por.csv"
 PROCESSED_DATA_FILE = PROCESSED_DATA_DIR / "student_performance_processed.csv"
 
-MODEL_FILE = MODELS_DIR / "mlp_student_risk.keras"
+MODEL_FILE = MODELS_DIR / "mlp_student_risk.h5"
 PREPROCESSOR_FILE = MODELS_DIR / "preprocessor.joblib"
 SCHEMA_FILE = MODELS_DIR / "feature_schema.json"
 METRICS_FILE = OUTPUTS_DIR / "metrics.json"
@@ -31,4 +31,3 @@ VALIDATION_SIZE = 0.2
 def ensure_project_dirs() -> None:
     for directory in [RAW_DATA_DIR, PROCESSED_DATA_DIR, MODELS_DIR, OUTPUTS_DIR]:
         directory.mkdir(parents=True, exist_ok=True)
-
