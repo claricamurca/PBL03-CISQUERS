@@ -7,4 +7,4 @@ font = "sans serif"
 
 [client]
 toolbarMode = "minimal"
-showSidebarNavigation = falses
+showSidebarNavigation = false
